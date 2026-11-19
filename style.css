@@ -1,0 +1,1321 @@
+/* ============================================================
+   Quiet Compass: how everything looks.
+
+   Every colour, type size, spacing step and control size is named once,
+   in the block below. To match a Figma design, change the values here
+   and the whole app follows.
+   ============================================================ */
+
+:root {
+  color-scheme: light dark; /* lets the date picker follow light or dark mode */
+
+  /* Colours */
+  --bg: #ffffff;
+  --text: #111111;
+  --muted: #6b6b6b;
+  --line: #d9d9d9;
+  --track: #f0f0f0; /* the soft background behind a row of choices */
+  --card: #f4f4f2; /* the suggestion card */
+  --accent: #d9622b; /* placeholder accent: used only for the main action button */
+  --on-accent: #111111;
+
+  /* Type sizes */
+  --type-heading: 24px; /* the name of each screen */
+  --type-title: 28px; /* the suggestion: the largest thing in the app */
+  --type-lead: 22px; /* the one important line on a screen */
+  --type-large: 19px;
+  --type-body: 17px;
+  --type-small: 15px;
+  --type-label: 14px; /* small grey labels */
+
+  /* Spacing steps */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --gutter: 20px; /* the gap at the left and right edges of the screen */
+
+  /* Controls */
+  --control: 44px; /* buttons and switches */
+  --control-main: 48px; /* the main action, in the bar at the bottom */
+  --field: 46px; /* text boxes */
+  --radius: 12px;
+  --radius-card: 16px;
+  --border: 1.5px;
+
+  /* The bars fixed to the bottom of the screen */
+  --tabs-height: 54px;
+  --bar-height: 68px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d0d0d;
+    --text: #f2f2f2;
+    --muted: #9a9a9a;
+    --line: #333333;
+    --track: #1c1c1c;
+    --card: #1e1e1e;
+  }
+}
+
+/* ---------- Basics ---------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  font-size: var(--type-body);
+  line-height: 1.35;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* "hidden" always wins over layout rules. */
+[hidden] {
+  display: none !important;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; /* stops the double-tap zoom on iPhone */
+}
+
+p {
+  margin: 0;
+}
+
+/* ---------- A screen ---------- */
+
+.screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: calc(var(--space-5) + env(safe-area-inset-top)) var(--gutter)
+    calc(var(--tabs-height) + var(--space-5) + env(safe-area-inset-bottom));
+}
+
+/* Screens with an action bar need extra room so nothing hides behind it. */
+#screen-now,
+#screen-night {
+  padding-bottom: calc(var(--tabs-height) + var(--bar-height) + var(--space-5) + env(safe-area-inset-bottom));
+}
+
+h1 {
+  margin: 0;
+  font-size: var(--type-heading);
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+/* Small grey section labels */
+h2,
+h3,
+.mini-label,
+.chips-label {
+  margin: 0 0 10px;
+  font-size: var(--type-label);
+  line-height: 1.3;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.date {
+  margin-top: var(--space-1);
+  font-size: var(--type-small);
+  color: var(--muted);
+}
+
+/* Present for screen readers, invisible on screen */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.block {
+  margin-top: var(--space-6);
+}
+
+.hint {
+  font-size: var(--type-small);
+  color: var(--muted);
+}
+
+/* ---------- Buttons ---------- */
+
+/* A row of buttons: the main one wide, the other narrow */
+.actions {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.actions.even {
+  grid-template-columns: 1fr 1fr;
+  margin-top: var(--space-3);
+}
+
+.actions button,
+.card-button,
+.stack button {
+  min-height: var(--control);
+  padding: 0 var(--space-4);
+  border: var(--border) solid var(--line);
+  border-radius: var(--radius);
+  background: transparent;
+  font-size: var(--type-body);
+  font-weight: 500;
+}
+
+/* The one place the accent colour is used: the main action. */
+.actions .primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.card-button {
+  width: 100%;
+}
+
+/* A quiet button that reads as a line of text */
+.text-button {
+  display: block;
+  width: 100%;
+  min-height: var(--control);
+  margin-top: var(--space-2);
+  border: none;
+  background: transparent;
+  font-size: var(--type-small);
+  color: var(--muted);
+}
+
+/* An underlined link */
+.link-button {
+  min-height: var(--control);
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: var(--type-small);
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- Text boxes ---------- */
+
+label {
+  display: block;
+  margin: var(--space-4) 0 var(--space-2);
+  font-size: var(--type-label);
+  font-weight: 500;
+  color: var(--muted);
+}
+
+input[type="text"],
+input[type="date"],
+textarea {
+  display: block;
+  width: 100%;
+  min-height: var(--field);
+  padding: 0 14px;
+  border: var(--border) solid var(--line);
+  border-radius: var(--radius);
+  background: transparent;
+  font-size: var(--type-body); /* 16px or more stops iPhone zooming in when typing */
+  text-align: left;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+textarea {
+  padding: var(--space-3) 14px;
+  line-height: 1.35;
+  resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--text);
+}
+
+/* ---------- The bars fixed at the bottom ---------- */
+
+.tabs {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 6;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  padding-bottom: env(safe-area-inset-bottom);
+  border-top: var(--border) solid var(--line);
+  background: var(--bg);
+}
+
+.tabs button {
+  min-height: calc(var(--tabs-height) - var(--border));
+  border: none;
+  background: transparent;
+  font-size: var(--type-small);
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.tabs button[aria-current="page"] {
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* The action bar: the main action, just above the tabs, where my thumb rests */
+.action-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--tabs-height) + env(safe-area-inset-bottom));
+  z-index: 5;
+  padding: 10px var(--gutter);
+  border-top: var(--border) solid var(--line);
+  background: var(--bg);
+}
+
+.action-bar .actions {
+  display: flex;
+  margin-top: 0;
+}
+
+.action-bar .actions .primary {
+  flex: 1;
+}
+
+.action-bar button {
+  min-height: var(--control-main);
+}
+
+/* ---------- What now ---------- */
+
+/* The suggestion card */
+/* The card always fills the space between the heading and the switches, so it is the
+   same height whether the suggestion is one short line or several long ones.
+   If a suggestion is ever too long for it, the text scrolls inside the card. */
+.result {
+  flex: 1 1 0;
+  min-height: 200px;
+  max-height: 440px;
+  overflow-y: auto;
+  margin-top: 0;
+  padding: var(--gutter);
+  border-radius: 20px;
+  background: var(--card);
+}
+
+.kind {
+  margin-bottom: var(--space-3);
+  font-size: var(--type-label);
+  color: var(--muted);
+}
+
+.suggestion {
+  font-size: var(--type-title);
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.why {
+  margin-top: var(--space-2);
+  font-size: var(--type-body);
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+/* The three questions: label on the left, a compact switch on the right */
+.question {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+/* The switches are pinned to the bottom of the screen, just above the action bar.
+   The suggestion card above can grow or shrink without moving them. */
+#screen-now {
+  display: flex;
+  flex-direction: column;
+}
+
+.question:first-of-type {
+  margin-top: auto;
+  padding-top: var(--space-5);
+}
+
+.question h2 {
+  margin: 0;
+}
+
+.choices {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 3px;
+  border-radius: var(--radius);
+  background: var(--track);
+}
+
+.choices button {
+  min-height: 40px;
+  padding: 0 var(--space-1);
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  font-size: var(--type-small);
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.choices button[aria-pressed="true"] {
+  background: var(--text);
+  color: var(--bg);
+}
+
+/* The two links, then the closing-window form */
+.windows {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: var(--space-3);
+}
+
+.windows > .text-button {
+  width: auto;
+  margin-top: 0;
+}
+
+.windows form {
+  width: 100%;
+  margin-top: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: var(--border) solid var(--line);
+}
+
+#window-list,
+.minimums,
+.plain-list,
+.essentials,
+.history,
+.sheet ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#window-list {
+  margin-top: var(--space-4);
+}
+
+#window-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: var(--control);
+  border-top: var(--border) solid var(--line);
+}
+
+#window-list button {
+  min-height: var(--control);
+  padding: 0 0 0 var(--space-3);
+  border: none;
+  background: transparent;
+  font-size: var(--type-small);
+  color: var(--muted);
+}
+
+/* The coach's line about what I just did, with Undo beside it */
+.coach {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  font-size: var(--type-small);
+  line-height: 1.35;
+}
+
+.coach .link-button {
+  flex: none;
+  min-height: 0;
+  padding: 6px 0 6px var(--space-2);
+  color: var(--text);
+}
+
+/* ---------- The honest nudge ---------- */
+
+.nudge {
+  margin-top: var(--space-3);
+  padding: 14px var(--space-4);
+  border: var(--border) solid var(--line);
+  border-radius: var(--radius-card);
+}
+
+.nudge p {
+  font-size: var(--type-small);
+  line-height: 1.4;
+}
+
+.nudge-buttons {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.nudge-buttons button {
+  min-height: var(--control);
+  padding: var(--space-2) 14px;
+  border-radius: var(--radius);
+  background: transparent;
+  font-size: var(--type-small);
+  line-height: 1.2;
+}
+
+.nudge-yes {
+  flex: 1;
+  border: var(--border) solid var(--text);
+  font-weight: 600;
+  text-align: left;
+}
+
+.nudge-buttons .nudge-no {
+  flex: none;
+  border: none;
+  color: var(--muted);
+}
+
+/* ---------- Morning ---------- */
+
+.went-well {
+  font-size: var(--type-body);
+}
+
+.one-thing,
+.essential {
+  font-size: var(--type-lead);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.essential-way {
+  margin-top: var(--space-2);
+  font-size: var(--type-body);
+}
+
+#essential-area {
+  margin-top: var(--space-1);
+}
+
+/* The daily minimums: each row is one big tick box. */
+.minimums li {
+  border-top: var(--border) solid var(--line);
+}
+
+.minimums button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 56px;
+  padding: var(--space-1) 0;
+  border: none;
+  background: transparent;
+  font-size: var(--type-body);
+  text-align: left;
+}
+
+.minimums .tick {
+  position: relative;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border: var(--border) solid var(--muted);
+  border-radius: 50%;
+}
+
+.minimums .label {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: var(--space-1) 0;
+}
+
+.minimums .benefit {
+  font-size: var(--type-label);
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.minimums button[aria-checked="true"] {
+  color: var(--muted);
+}
+
+.minimums button[aria-checked="true"] .tick {
+  border-color: var(--text);
+  background: var(--text);
+}
+
+/* The tick mark itself, drawn as two sides of a small rotated box. */
+.minimums button[aria-checked="true"] .tick::after {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 3px;
+  width: 6px;
+  height: 11px;
+  border: solid var(--bg);
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+}
+
+/* ---------- Night ---------- */
+
+/* On Night and the Compass, the questions are the content, so they are larger. */
+.night label,
+.compass label {
+  margin: var(--space-6) 0 10px;
+  font-size: var(--type-large);
+  line-height: 1.25;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.night form .hint {
+  margin-top: 2px;
+  font-size: var(--type-label);
+}
+
+#night-saved {
+  min-height: 20px;
+  margin-top: var(--space-4);
+}
+
+.week-review-heading {
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+.balance {
+  margin-bottom: var(--space-4);
+  font-size: var(--type-body);
+  line-height: 1.4;
+}
+
+#week-review .balance {
+  margin-bottom: 0;
+}
+
+.stat {
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.stat-label {
+  font-size: var(--type-small);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+
+#today-extra {
+  margin-top: var(--space-1);
+}
+
+/* The last 7 days */
+.week-totals {
+  margin-bottom: var(--space-1);
+  font-size: var(--type-body);
+  font-weight: 600;
+}
+
+.area-row-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  font-size: var(--type-label);
+  color: var(--muted);
+}
+
+/* Seven squares, lined up with the seven bars below them. */
+.area-row,
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-1);
+}
+
+.area-row {
+  margin-top: 5px;
+}
+
+.area-row .cell {
+  display: flex;
+  justify-content: center;
+}
+
+.area-row .square {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: var(--line);
+}
+
+.area-row .square.on {
+  background: var(--muted);
+}
+
+.area-row .square.on.selected {
+  background: var(--text);
+}
+
+.mini-label {
+  margin: var(--space-5) 0 0;
+}
+
+/* One day: a bar, the weekday letter and a dot. The whole column is tappable. */
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-2) 0;
+  border: none;
+  background: transparent;
+  font-size: var(--type-label);
+  color: var(--muted);
+}
+
+.day .track {
+  position: relative;
+  width: 12px;
+  height: 56px;
+  border-radius: 3px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.day .bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 3px 3px 0 0;
+  background: var(--muted);
+}
+
+.day .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.day .dot.on {
+  background: currentColor;
+}
+
+/* The day I tapped stands out. */
+.day[aria-pressed="true"] {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.day[aria-pressed="true"] .bar {
+  background: var(--text);
+}
+
+#day-detail {
+  margin-bottom: var(--space-2);
+  color: var(--text);
+}
+
+/* ---------- The pick sheet ---------- */
+
+/* The dimmed layer over the whole screen */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* The sheet itself, sitting at the bottom */
+.sheet {
+  width: 100%;
+  max-height: 75vh;
+  max-height: 75dvh;
+  overflow-y: auto;
+  padding: var(--gutter) var(--gutter) calc(var(--space-2) + env(safe-area-inset-bottom));
+  border-top: var(--border) solid var(--line);
+  border-radius: 20px 20px 0 0;
+  background: var(--bg);
+}
+
+.sheet h2 {
+  margin: 0;
+  font-size: var(--type-large);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.sheet .hint {
+  margin-top: var(--space-1);
+}
+
+.sheet ul {
+  margin-top: var(--space-3);
+}
+
+.sheet li {
+  border-top: var(--border) solid var(--line);
+}
+
+.sheet li button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--control);
+  padding: var(--space-2) 0;
+  border: none;
+  background: transparent;
+  line-height: 1.25;
+  text-align: left;
+}
+
+/* A chosen option gets a tick on the right. */
+.sheet li button[aria-pressed="true"]::after {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 12px;
+  margin-right: var(--space-2);
+  border: solid var(--text);
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+}
+
+body.sheet-open {
+  overflow: hidden;
+}
+
+/* ---------- My Compass ---------- */
+
+.motto {
+  margin-top: var(--space-4);
+  font-size: var(--type-large);
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.tier {
+  margin: var(--space-6) 0 10px;
+}
+
+/* One life area: a row I tap to unfold. */
+.area {
+  border-top: var(--border) solid var(--line);
+}
+
+.area summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 58px;
+  list-style: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.area summary::-webkit-details-marker {
+  display: none;
+}
+
+.area-name {
+  font-size: var(--type-body);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+/* Seven dots: one per day, filled when the area got some attention. */
+.fed-dots {
+  display: flex;
+  flex: none;
+  gap: var(--space-1);
+}
+
+.fed-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.fed-dots span.on {
+  background: var(--text);
+}
+
+.area[open] {
+  padding-bottom: var(--space-4);
+}
+
+.area h3 {
+  margin: var(--gutter) 0 6px;
+}
+
+.area h3:first-of-type {
+  margin-top: var(--space-1);
+}
+
+.area p,
+.area li {
+  font-size: var(--type-small);
+  line-height: 1.4;
+}
+
+.area .my-why {
+  font-size: var(--type-body);
+  font-weight: 500;
+}
+
+.area .quiet {
+  color: var(--muted);
+}
+
+.plain-list li + li {
+  margin-top: 2px;
+}
+
+/* "What feeds it": each activity on a row, with "Finished" beside the ones that can end */
+.feeds-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feeds-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 40px;
+}
+
+.feeds-list .link-button {
+  flex: none;
+  min-height: 40px;
+  font-size: var(--type-label);
+}
+
+/* Adding something of my own */
+.add-link {
+  display: block;
+  margin-top: var(--space-1);
+}
+
+.add-form {
+  margin-top: var(--space-3);
+  padding-top: var(--space-1);
+  border-top: var(--border) solid var(--line);
+}
+
+.add-form .add-problem {
+  margin-top: var(--space-3);
+  color: var(--text);
+}
+
+.feeds-list li span {
+  flex: 1;
+}
+
+/* The folded list of what I've finished */
+.finished-fold {
+  margin-top: var(--space-2);
+}
+
+.area .finished-fold summary {
+  min-height: var(--control);
+  font-size: var(--type-label);
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.finished-fold li span {
+  color: var(--muted);
+}
+
+.area .actions {
+  margin-top: var(--space-3);
+}
+
+.compass form {
+  margin-top: var(--space-4);
+}
+
+/* The no-regret essentials, numbered */
+.essentials {
+  counter-reset: essential;
+}
+
+.essentials li {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  padding: 14px 0;
+  border-top: var(--border) solid var(--line);
+  font-size: var(--type-small);
+  line-height: 1.35;
+  counter-increment: essential;
+}
+
+.essentials li::before {
+  content: counter(essential);
+  grid-row: span 2;
+  color: var(--muted);
+}
+
+.essentials .essential-area {
+  font-size: var(--type-label);
+  color: var(--muted);
+}
+
+/* ---------- Help me decide ---------- */
+
+.chips-label {
+  margin: var(--space-3) 0 var(--space-2);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chips button {
+  min-height: 34px;
+  padding: 0 var(--space-3);
+  border: var(--border) solid var(--line);
+  border-radius: 17px;
+  background: transparent;
+  font-size: var(--type-label);
+}
+
+.chips button[aria-pressed="true"] {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--bg);
+}
+
+#decide-question,
+#decide-result,
+#decide-history {
+  margin-top: var(--space-5);
+}
+
+/* The question, and the answer, in large type */
+.decide-text {
+  margin-top: var(--space-1);
+  font-size: var(--type-lead);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.decide-finding,
+.decide-reason {
+  margin-top: var(--space-3);
+  font-size: var(--type-body);
+  line-height: 1.4;
+}
+
+/* The choices, stacked one above the other */
+.stack {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+.stack button {
+  min-height: var(--control-main);
+  padding: var(--space-2) var(--space-4);
+}
+
+.stack .quiet-choice {
+  border-color: transparent;
+  color: var(--muted);
+}
+
+/* The option my diary points to */
+.stack button.suggested {
+  border-color: var(--text);
+  border-width: 2.5px;
+}
+
+.decide-keep-prompt,
+.decide-kept {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: var(--border) solid var(--line);
+  font-size: var(--type-small);
+  line-height: 1.4;
+}
+
+.decide-kept {
+  color: var(--muted);
+}
+
+/* Past decisions */
+.history li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3) 0;
+  border-top: var(--border) solid var(--line);
+}
+
+.history-date,
+.history-why {
+  font-size: var(--type-label);
+  color: var(--muted);
+}
+
+.history-what {
+  font-size: var(--type-body);
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+/* ============================================================
+   Feel: how things respond and move.
+   Everything here is switched off when the phone is set to reduce motion.
+   ============================================================ */
+
+/* --- Every button answers a press straight away --- */
+
+button {
+  transition: transform 90ms ease-out, opacity 90ms ease-out, background-color 160ms ease-out,
+    color 160ms ease-out, border-color 160ms ease-out;
+}
+
+button:active {
+  opacity: 0.75;
+  transform: scale(0.97);
+}
+
+/* The switches and rows are wide, so they press in more gently. */
+.choices button:active,
+.minimums button:active,
+.sheet li button:active,
+.tabs button:active {
+  transform: scale(0.985);
+}
+
+.tabs button {
+  transition: color 160ms ease-out;
+}
+
+/* --- The suggestion card: a short fade and rise when it says something new --- */
+
+.result.changed > * {
+  animation: arrive 220ms ease-out both;
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --- Moving between screens: a quick fade --- */
+
+.screen:not([hidden]) {
+  animation: fade-in 160ms ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* --- The pick sheet slides up, and back down --- */
+
+.sheet-backdrop:not([hidden]) {
+  animation: fade-in 180ms ease-out both;
+}
+
+.sheet-backdrop:not([hidden]) .sheet {
+  animation: slide-up 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.sheet-backdrop.closing {
+  animation: fade-out 170ms ease-in both;
+}
+
+.sheet-backdrop.closing .sheet {
+  animation: slide-down 170ms ease-in both;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    transform: none;
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* --- Morning: a tick pops when I tick it --- */
+
+.minimums .tick {
+  transition: background-color 160ms ease-out, border-color 160ms ease-out;
+}
+
+.minimums .tick.pop {
+  animation: pop 260ms cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.6);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* --- Compass: an area unfolds --- */
+
+.area.just-opened > :not(summary) {
+  animation: arrive 220ms ease-out both;
+}
+
+/* --- A short confirmation in the action bar (Night's "Saved") --- */
+
+.bar-note {
+  margin-bottom: 10px;
+  font-size: var(--type-small);
+  line-height: 1.35;
+  text-align: center;
+}
+
+.bar-note:not([hidden]) {
+  animation: arrive 220ms ease-out both;
+}
+
+/* The button turns from the accent colour to plain white-on-dark (or dark-on-white)
+   with a tick, so the change is obvious at a glance. */
+.actions .primary.confirmed {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--bg);
+  animation: confirm 240ms cubic-bezier(0.2, 0.9, 0.3, 1.3);
+}
+
+@keyframes confirm {
+  from {
+    transform: scale(0.96);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.actions .primary.confirmed::after {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 12px;
+  margin: 0 0 2px 10px;
+  border: solid var(--bg);
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+}
+
+/* --- The nudge arrives gently --- */
+
+.nudge:not([hidden]) {
+  animation: fade-in 220ms ease-out both;
+}
+
+/* --- Respect the phone's "Reduce Motion" setting --- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  button:active {
+    transform: none;
+  }
+}

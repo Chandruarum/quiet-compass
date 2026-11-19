@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Quiet Compass</title>
+
+  <!-- Home Screen: icon, name and a full-screen look -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-title" content="Compass">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d0d0d" media="(prefers-color-scheme: dark)">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <!-- Morning -->
+    <div class="screen" id="screen-morning" hidden>
+      <h1 data-words="morning.title"></h1>
+      <p class="date" id="morning-date"></p>
+      <div class="nudge" id="nudge-morning" hidden></div>
+
+      <section class="block" id="went-well-block" hidden>
+        <h2 data-words="morning.wentWellLabel"></h2>
+        <p class="went-well" id="went-well"></p>
+      </section>
+
+      <section class="block" id="one-thing-block" hidden>
+        <h2 data-words="morning.lookingForward"></h2>
+        <p class="one-thing" id="one-thing"></p>
+      </section>
+
+      <section class="block" id="week-thing-block" hidden>
+        <h2 data-words="morning.weekLabel"></h2>
+        <p class="went-well" id="week-thing"></p>
+        <p class="hint" id="week-thing-area"></p>
+      </section>
+
+      <section class="block">
+        <h2 data-words="morning.essentialLabel"></h2>
+        <p class="essential" id="essential-text"></p>
+        <p class="essential-way" id="essential-way"></p>
+        <p class="hint" id="essential-area"></p>
+      </section>
+
+      <section class="block">
+        <h2 id="minimum-heading"></h2>
+        <ul class="minimums" id="minimum-list"></ul>
+      </section>
+    </div>
+
+    <!-- What Now -->
+    <div class="screen" id="screen-now">
+      <!-- The heading is kept for screen readers but not shown, so the suggestion gets the space. -->
+      <h1 class="sr-only" data-words="now.title"></h1>
+
+      <!-- The suggestion, first and most prominent -->
+      <div class="result" aria-live="polite">
+        <p class="coach" id="coach" hidden>
+          <span id="coach-text"></span>
+          <button type="button" class="link-button" id="undo" data-words="now.undo" hidden></button>
+        </p>
+        <p class="hint" id="hint"></p>
+        <p class="kind" id="kind" hidden></p>
+        <p class="suggestion" id="suggestion" hidden></p>
+        <p class="why" id="why" hidden></p>
+      </div>
+      <div class="nudge" id="nudge-now" hidden></div>
+
+
+      <section class="question" data-question="energy">
+        <h2 data-words="now.energyLabel"></h2>
+        <div class="choices">
+          <button type="button" data-value="low" data-words="now.energyLow"></button>
+          <button type="button" data-value="medium" data-words="now.energyMedium"></button>
+          <button type="button" data-value="high" data-words="now.energyHigh"></button>
+        </div>
+      </section>
+
+      <section class="question" data-question="place">
+        <h2 data-words="now.placeLabel"></h2>
+        <div class="choices">
+          <button type="button" data-value="sit" data-words="now.placeSit"></button>
+          <button type="button" data-value="walk" data-words="now.placeWalk"></button>
+          <button type="button" data-value="out" data-words="now.placeOut"></button>
+        </div>
+      </section>
+
+      <section class="question" data-question="time">
+        <h2 data-words="now.timeLabel"></h2>
+        <div class="choices">
+          <button type="button" data-value="10" data-words="now.time10"></button>
+          <button type="button" data-value="30" data-words="now.time30"></button>
+          <button type="button" data-value="60" data-words="now.time60"></button>
+        </div>
+      </section>
+
+      <section class="windows">
+        <button type="button" class="text-button" id="open-decide" data-words="decide.open"></button>
+        <button type="button" class="text-button" id="open-windows" data-words="windows.open"></button>
+
+        <form id="window-form" hidden>
+          <h2 data-words="windows.title"></h2>
+          <p class="hint" data-words="windows.hint"></p>
+
+          <label for="window-name" data-words="windows.nameLabel"></label>
+          <input type="text" id="window-name" autocomplete="off" required>
+
+          <label for="window-date" data-words="windows.dateLabel"></label>
+          <input type="date" id="window-date">
+
+          <div class="actions">
+            <button type="submit" class="primary" data-words="windows.add"></button>
+            <button type="button" id="close-windows" data-words="windows.close"></button>
+          </div>
+
+          <ul id="window-list"></ul>
+        </form>
+      </section>
+
+      <!-- The action bar: fixed just above the bottom tabs, where my thumb rests -->
+      <div class="action-bar" id="now-bar" hidden>
+        <div class="actions" id="actions" hidden>
+          <button type="button" class="primary" id="done" data-words="now.done"></button>
+          <button type="button" id="skip" data-words="now.skip"></button>
+          <button type="button" id="another" data-words="now.another" hidden></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Night -->
+    <div class="screen night" id="screen-night" hidden>
+      <h1 data-words="night.title"></h1>
+      <p class="date" id="night-date"></p>
+
+      <form id="night-form">
+        <label for="night-well" data-words="night.wentWell"></label>
+        <input type="text" id="night-well" autocomplete="off" enterkeyhint="next">
+        <button type="button" class="link-button" data-pick="well" data-words="night.pick"></button>
+
+        <label for="night-regret" data-words="night.regret"></label>
+        <input type="text" id="night-regret" autocomplete="off" enterkeyhint="next">
+        <button type="button" class="link-button" data-pick="regret" data-words="night.pick"></button>
+        <p class="hint" data-words="night.regretHint"></p>
+
+        <label for="night-one-thing" data-words="night.oneThing"></label>
+        <input type="text" id="night-one-thing" autocomplete="off">
+        <button type="button" class="link-button" data-pick="oneThing" data-words="night.pick"></button>
+
+        <!-- Sunday nights only: the weekly review -->
+        <div id="week-review" hidden>
+          <h2 class="week-review-heading" data-words="night.weekReviewHeading"></h2>
+          <p class="balance" id="week-starved"></p>
+          <label for="night-week" data-words="night.weekPrompt"></label>
+          <input type="text" id="night-week" autocomplete="off" enterkeyhint="done">
+          <button type="button" class="link-button" data-pick="week" data-words="night.pick"></button>
+        </div>
+
+        <p class="hint" id="night-saved" aria-live="polite"></p>
+      </form>
+
+      <section class="block">
+        <h2 data-words="night.todayHeading"></h2>
+        <p class="balance" id="balance"></p>
+        <p class="stat"><span id="today-count"></span> <span class="stat-label" data-words="night.todayLabel"></span></p>
+        <p class="hint" id="today-extra"></p>
+      </section>
+
+      <section class="block">
+        <h2 data-words="night.weekHeading"></h2>
+        <p class="week-totals" id="week-totals"></p>
+        <div id="area-week"></div>
+        <h3 class="mini-label" data-words="night.minimumsLabel"></h3>
+        <div class="week" id="week"></div>
+        <p class="hint" id="day-detail" aria-live="polite"></p>
+        <p class="hint" data-words="night.weekKey"></p>
+      </section>
+
+      <!-- The action bar: Night's main action, in the same spot as on What now -->
+      <div class="action-bar">
+        <p class="bar-note" id="night-note" aria-live="polite" hidden></p>
+        <div class="actions">
+          <button type="submit" form="night-form" class="primary" id="night-finish" data-words="night.finish"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Help me decide (opened from What Now) -->
+    <div class="screen decide" id="screen-decide" hidden>
+      <h1 data-words="decide.title"></h1>
+
+      <!-- 1. Name the two things -->
+      <form id="decide-form">
+        <p class="date" data-words="decide.lead"></p>
+        <label for="decide-a" data-words="decide.firstLabel"></label>
+        <input type="text" id="decide-a" autocomplete="off" required>
+        <p class="chips-label" data-words="decide.areaPrompt"></p>
+        <div class="chips" id="decide-areas-a"></div>
+        <label for="decide-b" data-words="decide.secondLabel"></label>
+        <input type="text" id="decide-b" autocomplete="off" required>
+        <p class="chips-label" data-words="decide.areaPrompt"></p>
+        <div class="chips" id="decide-areas-b"></div>
+        <div class="actions">
+          <button type="submit" class="primary" data-words="decide.start"></button>
+          <button type="button" id="decide-cancel" data-words="decide.cancel"></button>
+        </div>
+        <button type="button" class="text-button" id="decide-open-history" data-words="decide.history"></button>
+      </form>
+
+      <!-- Past decisions -->
+      <div id="decide-history" hidden>
+        <h2 class="tier" data-words="decide.history"></h2>
+        <p class="hint" id="decide-history-empty" data-words="decide.historyEmpty" hidden></p>
+        <ul class="history" id="decide-history-list"></ul>
+        <button type="button" class="text-button" id="decide-history-back" data-words="decide.historyBack"></button>
+      </div>
+
+      <!-- 2. One question at a time -->
+      <div id="decide-question" hidden>
+        <p class="hint" id="decide-progress"></p>
+        <p class="decide-text" id="decide-text"></p>
+        <p class="decide-finding" id="decide-finding" hidden></p>
+        <div class="stack">
+          <button type="button" id="decide-pick-a"></button>
+          <button type="button" id="decide-pick-b"></button>
+          <button type="button" class="quiet-choice" id="decide-neither" data-words="decide.neither"></button>
+        </div>
+      </div>
+
+      <!-- 3. The answer -->
+      <div id="decide-result" hidden>
+        <p class="hint" data-words="decide.resultLabel"></p>
+        <p class="decide-text" id="decide-answer"></p>
+        <p class="decide-reason" id="decide-reason"></p>
+
+        <!-- Keep the other option for later -->
+        <div id="decide-keep">
+          <p class="decide-keep-prompt" id="decide-keep-prompt"></p>
+          <div class="actions even">
+            <button type="button" id="decide-keep-tomorrow" data-words="decide.keepTomorrow"></button>
+            <button type="button" id="decide-keep-open" data-words="decide.keepOpen"></button>
+          </div>
+        </div>
+        <p class="decide-kept" id="decide-kept" hidden></p>
+        <div class="actions">
+          <button type="button" class="primary" id="decide-close" data-words="decide.close"></button>
+          <button type="button" id="decide-again" data-words="decide.again"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- My Compass -->
+    <div class="screen compass" id="screen-compass" hidden>
+      <!-- First visit: one "why" question per life area -->
+      <div id="compass-intro" hidden>
+        <h1 data-words="compass.introTitle"></h1>
+        <p class="date" data-words="compass.introLead"></p>
+
+        <form id="why-form">
+          <p class="hint" id="why-progress"></p>
+          <label for="why-text" id="why-question"></label>
+          <textarea id="why-text" rows="5"></textarea>
+          <div class="actions">
+            <button type="submit" class="primary" data-words="compass.introSave"></button>
+            <button type="button" id="why-skip" data-words="compass.introSkip"></button>
+          </div>
+        </form>
+      </div>
+
+      <!-- After that: the compass itself -->
+      <div id="compass-main" hidden>
+        <h1 data-words="compass.title"></h1>
+        <p class="motto" data-words="compass.motto"></p>
+        <div id="compass-areas"></div>
+
+        <h2 class="tier" data-words="compass.essentialsLabel"></h2>
+        <ol class="essentials" id="essentials-list"></ol>
+      </div>
+    </div>
+  </main>
+
+  <!-- The pick sheet: slides up from the bottom with options to tap -->
+  <div class="sheet-backdrop" id="sheet" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+      <h2 id="sheet-title"></h2>
+      <p class="hint" id="sheet-hint"></p>
+      <ul id="sheet-options"></ul>
+      <button type="button" class="text-button" id="sheet-close" data-words="night.sheetClose"></button>
+    </div>
+  </div>
+
+  <!-- The bar at the bottom for moving between screens -->
+  <nav class="tabs">
+    <button type="button" data-screen="morning" data-words="tabs.morning"></button>
+    <button type="button" data-screen="now" aria-current="page" data-words="tabs.now"></button>
+    <button type="button" data-screen="night" data-words="tabs.night"></button>
+    <button type="button" data-screen="compass" data-words="tabs.compass"></button>
+  </nav>
+
+  <script src="words.js"></script>
+  <script src="activities.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
